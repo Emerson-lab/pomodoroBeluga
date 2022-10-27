@@ -4,8 +4,8 @@ function App() {
 
   return (
     <>
-      <Button variant="primary"/>
-      <Button variant="danger"/>
+      <Button variant="primary" style={{margin:"0px 20px 0px 0px"}}/>
+      <Button variant="danger" />
       <Button variant="secondary"/>
     </>
   )
