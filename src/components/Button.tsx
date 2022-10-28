@@ -1,8 +1,8 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react'
 import { ButtonContainer, ButtonSize, ButtonVariant } from './Button.styles'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: ButtonVariant;
+  variant: ButtonVariant
   size: ButtonSize
 }
 
@@ -11,13 +11,8 @@ export default function Button({
   size = 'small',
   ...props
 }: Partial<ButtonProps>) {
-  
   return (
-    <ButtonContainer
-      variant={variant}
-      size={size}
-      {...props}
-    >
+    <ButtonContainer variant={variant} size={size} {...props}>
       button
     </ButtonContainer>
   )
