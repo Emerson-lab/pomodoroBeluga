@@ -2,8 +2,17 @@ import styled, { css } from 'styled-components';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success';
 
+export type ButtonSize = 'small' | 'medium' | 'large'
+
 interface ButtonProps {
-  variant: ButtonVariant
+  variant: ButtonVariant;
+  size: ButtonSize
+}
+
+const buttonSizes = {
+  small: '100px',
+  medium: '180px',
+  large: '220px'
 }
 
 const buttonVariants = {
@@ -14,14 +23,13 @@ const buttonVariants = {
 }
 
 export const ButtonContainer = styled.button<ButtonProps>`
-  width: 100px;
-  height: 60px;
-
-  background:  ${props => props.theme.primary}
-
-  /* ${props => {
+  ${props => {
     return css`
-      background: ${buttonVariants[props.variant]}
+      width: 100px;
+      background:  ${props => props.theme.primary};
+      height: 60px;
+      background: ${buttonVariants[props.variant]};
+      width: ${buttonSizes[props.size]};
     `
-  }} */
+  }}
 `
