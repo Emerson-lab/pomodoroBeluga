@@ -5,14 +5,12 @@ import {
 } from "./styles";
 
 import { HandPalm, Play } from "phosphor-react";
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import zod from "zod";
-import { createContext, useEffect, useState } from "react";
-import { differenceInSeconds } from 'date-fns';
+import { createContext, useState } from "react";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
-
 
 interface Cycle {
   id: string;
@@ -26,18 +24,45 @@ interface Cycle {
 type CyclesContextType = {
   activeCycle: Cycle | undefined;
   activeCycleId: string | null;
+  amountSecondsPassad: number;
   markCurrentCycleAsFinished: () => void;
+  setSecondesPassed: (seconds: number) => void;
 }
 
-export const CyclesContext = createContext({} as CyclesContextType)
+export const CyclesContext = createContext({} as CyclesContextType);
+
+const newCycleFormValidationSchema = zod.object({
+  task: zod.string().min(1, 'informe a tarefa'),
+  minutesAmount: zod
+    .number()
+    .min(1, "minimo de 5 min")
+    .max(60, 'Ciclo máximo de 60 min')
+})
+
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
 export default function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null);
+  const [amountSecondsPassad, setAmountSecondsPassad] = useState(0);
+
+  const newCycleForm = useForm<NewCycleFormData>({
+    resolver: zodResolver(newCycleFormValidationSchema),
+    defaultValues: {
+      task: '',
+      minutesAmount: 0,
+    }
+  });
+
+  const { handleSubmit, watch, reset } = newCycleForm
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
-  function markCurrentCycleAsFinished(){
+  function setSecondesPassed(seconds: number) {
+    setAmountSecondsPassad(seconds)
+  }
+
+  function markCurrentCycleAsFinished() {
     setCycles(state => state.map(cycle => {
       if (cycle.id === activeCycleId) {
         return { ...cycle, interruptedDate: new Date() }
@@ -79,9 +104,17 @@ export default function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
-
-        <CyclesContext.Provider value={{activeCycle, activeCycleId, markCurrentCycleAsFinished}}>
-          <NewCycleForm />
+        <CyclesContext.Provider
+          value={{
+            activeCycle,
+            activeCycleId,
+            markCurrentCycleAsFinished,
+            amountSecondsPassad,
+            setSecondesPassed
+          }}>
+          <FormProvider {...newCycleForm}>
+            <NewCycleForm />
+          </FormProvider>
           <Countdown />
         </CyclesContext.Provider>
 
