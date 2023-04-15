@@ -33,13 +33,9 @@ export default function History() {
                   <td>{formatDistanceToNow(cycle.startDate, { addSuffix: true, locale:ptBR })}</td>
                   <td>
                     {cycle.finishedDate && <Status statusColor="green">Concluído</Status>}
-                    <>
-                      {console.log('finishedDate',cycle.finishedDate)}
-                    </>
+                  
                     {cycle.interruptedDate && <Status statusColor="red">Interrompido</Status>}
-                    <>
-                    {console.log('interruptedDate',cycle.interruptedDate)}
-                    </>
+                  
                     {
                       !cycle.finishedDate && !cycle.interruptedDate &&
                       <Status statusColor="yellow">
