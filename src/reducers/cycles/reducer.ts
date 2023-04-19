@@ -1,7 +1,6 @@
 import { produce } from "immer";
 import { ActionTypes } from "./actions";
 
-
 export interface Cycle {
   id: string;
   task: string;
@@ -15,8 +14,6 @@ interface CyclesState {
   cycles: Cycle[];
   activeCycleId: string | null;
 }
-
-
 
 export function cyclesReducer(state: CyclesState, action: any) {
 
